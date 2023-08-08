@@ -1,9 +1,8 @@
 import express from "express";
+import { testResponse } from "../controllers/user.js";
 
 const userRouter = express.Router();
 
-userRouter.get("/testing", (req, res) => {
-  res.send("We have a response!!!");
-});
+userRouter.get("/testing", testResponse);
 
 export default userRouter;

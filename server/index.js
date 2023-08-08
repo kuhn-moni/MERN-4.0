@@ -17,6 +17,10 @@ app.listen(port, () => {
   console.log("Server is running on port..." + port);
 });
 
+app.use("*", (req, res) =>
+  res.status(404).json({ error: "Endpoint not found." })
+);
+
 app.use("/api/users", userRouter);
 
 // app.get("/hello", (req, res) => {
