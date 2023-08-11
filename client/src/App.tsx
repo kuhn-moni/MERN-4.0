@@ -5,7 +5,7 @@ import CreateUserForm from "./components/UserCard";
 import UserCard from "./components/CreatedUserFrom";
 
 function App() {
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
   // console.log(import.meta.env.VITE_SERVER_BASE);
   const [users, setUsers] = useState<Users>([]);
 
@@ -41,12 +41,12 @@ function App() {
         gap: "1em",
       }}
     >
-      <h1>MERN Project!!</h1>
+      <h1>Nike Training Club</h1>
       {users.length === 0 ? (
         <p>No Users 😞</p>
       ) : (
         <>
-          <h2>My current users are:</h2>
+          <h2>Current users:</h2>
           {users.map((u) => {
             return <UserCard key={u._id} user={u} />;
           })}
