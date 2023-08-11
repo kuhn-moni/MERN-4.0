@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { NotOk, Users } from "./@types";
-import CreateUserForm from "./components/UserCard";
-import UserCard from "./components/CreatedUserFrom";
+import CreateUserForm from "./components/CreatedUserFrom";
+import UserCard from "./components/UserCard";
 
 function App() {
-  // const [count, setCount] = useState(0);
-  // console.log(import.meta.env.VITE_SERVER_BASE);
   const [users, setUsers] = useState<Users>([]);
 
   console.log(import.meta.env.VITE_SERVER_BASE);
@@ -18,7 +16,7 @@ function App() {
           `${import.meta.env.VITE_SERVER_BASE}api/users/all`
         );
         if (response.ok) {
-          const result = await response.json();
+          const result = (await response.json()) as Users;
           setUsers(result);
           console.log(result);
         } else {
@@ -27,6 +25,8 @@ function App() {
         }
       } catch (error) {
         console.log(error);
+        const { message } = error as Error;
+        alert(message);
       }
     };
     fetchAllUsers().catch((e) => console.log(e));

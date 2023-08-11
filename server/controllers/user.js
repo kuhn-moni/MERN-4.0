@@ -33,7 +33,13 @@ const findUserByEmail = async (req, res) => {
     try {
       const foundUser = await UserModel.findOne({ email: email });
       if (foundUser) {
-        res.status(200).json(foundUser);
+        const forFront = {
+          email: foundUser.email,
+          username: foundUser.username,
+          _id: foundUser._id,
+          createdAt: foundUser.createdAt,
+        };
+        res.status(200).json(forFront);
       } else {
         res.status(404).json({ error: "No user found" });
       }
@@ -43,7 +49,43 @@ const findUserByEmail = async (req, res) => {
   } else {
     res.status(400).json({ error: "valid mail must be included" });
   }
-  // console.log(req.params);
+};
+const createUser = async (req, res) => {
+  console.log(req.body);
+  const { email, password, username } = req.body;
+  if (!email || !password || !username) {
+    res.status(400).json({ error: "All fields must be filled out" });
+    return;
+  }
+  const newUser = new UserModel({ email, password, username });
+  try {
+    const result = await newUser.save();
+    const forFront = {
+      email: result.email,
+      username: result.username,
+      _id: result._id,
+      createdAt: result.createdAt,
+    };
+    res.status(200).json(forFront);
+  } catch (e) {
+    console.log(e);
+    e.code === 11000
+      ? res.status(406).json({ error: "That email is already registered" })
+      : res.status(500).json({ error: "Unknown error occured" });
+  }
 };
 
-export { testResponse, findAllUsers, findUserByEmail };
+const updateUser = async (req, res) => {
+  // const { _id } = req.body;
+  // console.log(req.body)
+  try {
+    const result = await UserModel.findByIdAndUpdate(req.body._id, req.body, {
+      new: true,
+    });
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({ error: "Something went wrong..." });
+  }
+};
+
+export { testResponse, findAllUsers, findUserByEmail, createUser, updateUser };
