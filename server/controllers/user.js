@@ -9,7 +9,16 @@ const findAllUsers = async (request, response) => {
   try {
     const users = await UserModel.find();
     if (users) {
-      response.status(200).json(users);
+      const forFront = [];
+      users.forEach((user) =>
+        forFront.push({
+          email: user.email,
+          username: user.username,
+          createdAt: user.createdAt,
+          _id: user._id,
+        })
+      );
+      response.status(200).json(forFront);
     } else {
       response.status(404).json({ error: "nothing in collection" });
     }
