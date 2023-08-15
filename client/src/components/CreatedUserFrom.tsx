@@ -35,6 +35,9 @@ function CreateUserForm({
         const result = (await response.json()) as User;
         alert("user created!");
         setUsers([...users, { ...result }]);
+        setEmail("");
+        setUsername("");
+        setPassword("");
       } else {
         const result = (await response.json()) as NotOk;
         alert(result.error);
