@@ -64,9 +64,9 @@ const createUser = async (req, res) => {
       email: result.email,
       username: result.username,
       _id: result._id,
-      createdAt: result.createdAt,
+      createdAt: result.createdAt, //time stamp - users been active since x date
     };
-    res.status(200).json(forFront);
+    res.status(200).json(forFront); //this is safe details that is not visible on frontend
   } catch (e) {
     console.log(e);
     e.code === 11000
