@@ -69,9 +69,11 @@ const createUser = async (req, res) => {
     res.status(200).json(forFront); //this is safe details that is not visible on frontend
   } catch (e) {
     console.log(e);
-    e.code === 11000
-      ? res.status(406).json({ error: "That email is already registered" })
-      : res.status(500).json({ error: "Unknown error occured" });
+    if (e.code === 11000) {
+      res.status(406).json({ error: "That email is already registered" });
+    } else {
+      res.status(500).json({ error: "Unknown error occurred" });
+    }
   }
 };
 
