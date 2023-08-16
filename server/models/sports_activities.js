@@ -7,10 +7,7 @@ const activiesSchema = new mongoose.Schema(
       ref: "user",
       required: true,
     },
-    participant: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-    },
+    participant: { type: String },
     activity: { type: String, required: true },
     duration: { type: String, required: true },
     date: { type: String, required: true },
