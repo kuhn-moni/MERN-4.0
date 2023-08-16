@@ -16,7 +16,7 @@ const findAllUsers = async (request, response) => {
           username: user.username,
           createdAt: user.createdAt,
           _id: user._id,
-          activities: user.sports_activities,
+          sports_activities: user.sports_activities,
         })
       );
       response.status(200).json(forFront);
