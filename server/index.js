@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import userRouter from "./routes/user.js";
 import * as dotenv from "dotenv";
+import activitiesRouter from "./routes/sports_activities.js";
 dotenv.config();
 
 console.log("MOGO_URI", process.env.MONGO_URI);
@@ -28,6 +29,7 @@ const connectDatabase = async () => {
 };
 const defineRoutes = () => {
   app.use("/api/users", userRouter);
+  app.use("/api/activities", activitiesRouter);
   app.use("*", (req, res) =>
     res.status(404).json({ error: "Endpoint not found." })
   );
