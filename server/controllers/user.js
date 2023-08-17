@@ -65,9 +65,9 @@ const createUser = async (req, res) => {
       email: result.email,
       username: result.username,
       _id: result._id,
-      createdAt: result.createdAt, //time stamp - users been active since x date
+      createdAt: result.createdAt,
     };
-    res.status(200).json(forFront); //this is safe details that is not visible on frontend
+    res.status(200).json(forFront);
   } catch (e) {
     console.log(e);
     if (e.code === 11000) {
@@ -79,8 +79,6 @@ const createUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  // const { _id } = req.body;
-  // console.log(req.body)
   try {
     const result = await UserModel.findByIdAndUpdate(req.body._id, req.body, {
       new: true,
