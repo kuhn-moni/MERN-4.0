@@ -4,6 +4,7 @@ import cors from "cors";
 import userRouter from "./routes/user.js";
 import * as dotenv from "dotenv";
 import activitiesRouter from "./routes/sports_activities.js";
+import configureCloudinary from "./config/cloudinary.js";
 dotenv.config();
 
 console.log("MOGO_URI", process.env.MONGO_URI);
@@ -19,6 +20,7 @@ const connectMiddlewares = () => {
     })
   );
   app.use(cors());
+  configureCloudinary();
 };
 
 const connectDatabase = async () => {

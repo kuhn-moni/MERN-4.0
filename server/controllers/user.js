@@ -21,7 +21,7 @@ const findAllUsers = async (request, response) => {
       );
       response.status(200).json(forFront);
     } else {
-      response.status(404).json({ error: "nothing in collection" });
+      response.status(404).json({ error: "No users found" });
     }
   } catch (e) {
     response.status(500).json({ error: "Something went wrong..." });
