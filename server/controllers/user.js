@@ -4,7 +4,9 @@ import { UserModel } from "../models/user.js";
 const testResponse = (req, res) => {
   res.send("We have a response!!!!!!");
 };
-
+const middleTest = (req, res, next) => {
+  console.log("middleware is runngin");
+};
 const findAllUsers = async (request, response) => {
   try {
     const users = await UserModel.find().populate("sports_activities");
@@ -101,4 +103,11 @@ const updateUser = async (req, res) => {
   }
 };
 
-export { testResponse, findAllUsers, findUserByEmail, createUser, updateUser };
+export {
+  testResponse,
+  middleTest,
+  findAllUsers,
+  findUserByEmail,
+  createUser,
+  updateUser,
+};

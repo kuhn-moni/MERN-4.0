@@ -5,11 +5,12 @@ import {
   findUserByEmail,
   createUser,
   updateUser,
+  middleTest,
 } from "../controllers/user.js";
 
 const userRouter = express.Router();
 
-userRouter.get("/testing", testResponse);
+userRouter.get("/testing", middleTest, testResponse);
 userRouter.get("/all", findAllUsers);
 userRouter.get("/email/:email", findUserByEmail);
 
