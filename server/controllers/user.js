@@ -5,7 +5,10 @@ const testResponse = (req, res) => {
   res.send("We have a response!!!!!!");
 };
 const middleTest = (req, res, next) => {
-  console.log("middleware is runngin");
+  {
+    console.log("middleware is running");
+    next();
+  }
 };
 const findAllUsers = async (request, response) => {
   try {
