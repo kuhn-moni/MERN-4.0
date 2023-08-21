@@ -1,9 +1,10 @@
-import { response } from "express";
 import { UserModel } from "../models/user.js";
+import { imageUpload } from "../utilities/imageManagement.js";
 
 const testResponse = (req, res) => {
   res.send("We have a response!!!!!!");
 };
+
 const middleTest = (req, res, next) => {
   {
     console.log("middleware is running");
@@ -58,11 +59,14 @@ const findUserByEmail = async (req, res) => {
 };
 const createUser = async (req, res) => {
   console.log(req.body);
+  console.log(req.file);
   const { email, password, username } = req.body;
   if (!email || !password || !username) {
     res.status(400).json({ error: "All fields must be filled out" });
     return;
   }
+  const result = await imageUpload(req.file, "profile_pictures");
+  console.log(result);
   const newUser = new UserModel({ email, password, username });
   try {
     const result = await newUser.save();
@@ -71,18 +75,16 @@ const createUser = async (req, res) => {
       username: result.username,
       _id: result._id,
       createdAt: result.createdAt,
+      profile_pic: result.profile_pic,
     };
     res.status(200).json(forFront);
   } catch (e) {
     console.log(e);
-    if (e.code === 11000) {
-      res.status(406).json({ error: "That email is already registered" });
-    } else {
-      res.status(500).json({ error: "Unknown error occurred" });
-    }
+    e.code === 11000
+      ? res.status(406).json({ error: "That email is already registered" })
+      : res.status(500).json({ error: "Unknown error occured" });
   }
 };
-
 const updateUser = async (req, res) => {
   console.log(req.file);
 
