@@ -11,6 +11,7 @@ const middleTest = (req, res, next) => {
     next();
   }
 };
+
 const findAllUsers = async (request, response) => {
   try {
     const users = await UserModel.find().populate("sports_activities");
@@ -23,6 +24,7 @@ const findAllUsers = async (request, response) => {
           createdAt: user.createdAt,
           _id: user._id,
           sports_activities: user.sports_activities,
+          profile_pic: user.profile_pic,
         })
       );
       response.status(200).json(forFront);
@@ -57,6 +59,7 @@ const findUserByEmail = async (req, res) => {
     res.status(400).json({ error: "valid mail must be included" });
   }
 };
+
 const createUser = async (req, res) => {
   console.log(req.body);
   console.log(req.file);
@@ -67,7 +70,12 @@ const createUser = async (req, res) => {
   }
   const result = await imageUpload(req.file, "profile_pictures");
   console.log(result);
-  const newUser = new UserModel({ email, password, username });
+  const newUser = new UserModel({
+    email,
+    password,
+    username,
+    profile_pic: result,
+  });
   try {
     const result = await newUser.save();
     const forFront = {
@@ -85,15 +93,16 @@ const createUser = async (req, res) => {
       : res.status(500).json({ error: "Unknown error occured" });
   }
 };
+
 const updateUser = async (req, res) => {
   console.log(req.file);
 
   try {
     if (req.file) {
-      const newAvatar = await imageUpload(req.file, "badgers_avatars");
+      const newProfilePic = await imageUpload(req.file, "profile_pictures");
       const result = await UserModel.findByIdAndUpdate(
         req.body._id,
-        { ...req.body, avatar: newAvatar },
+        { ...req.body, profile_pic: newProfilePic },
         { new: true }
       );
       res.status(200).json(result);
