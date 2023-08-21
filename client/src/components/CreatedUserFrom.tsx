@@ -20,6 +20,7 @@ function CreateUserForm({
     urlencoded.append("email", email);
     urlencoded.append("password", password);
     urlencoded.append("username", username);
+
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -30,7 +31,6 @@ function CreateUserForm({
         `${import.meta.env.VITE_SERVER_BASE}api/users/new`,
         requestOptions
       );
-      console.log(response);
       if (response.ok) {
         const result = (await response.json()) as User;
         alert("user created!");
