@@ -18,6 +18,23 @@ function UserCard({ user }: Props) {
             style={{ height: "50px", width: "50px" }}
           />
         </p>
+        {user.sports_activities.length === 0 ? (
+          <p>No upcoming activities</p>
+        ) : (
+          <>
+            <p>Upocoming activities</p>
+            <ul>
+              {user.sports_activities.map((p) => {
+                return (
+                  <li key={p._id}>
+                    {p.activity} on {p.date} for {p.duration} with{" "}
+                    {p.participant}
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        )}
       </div>
     )
   );
