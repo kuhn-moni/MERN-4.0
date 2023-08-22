@@ -12,18 +12,18 @@ function CreateUserForm({
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   const createUser = async () => {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
     const urlencoded = new URLSearchParams();
     urlencoded.append("email", email);
     urlencoded.append("password", password);
     urlencoded.append("username", username);
-
+    if (avatarFile) {
+      urlencoded.append("image", avatarFile);
+    }
     const requestOptions = {
       method: "POST",
-      headers: myHeaders,
       body: urlencoded,
     };
     try {
@@ -76,6 +76,12 @@ function CreateUserForm({
         placeholder="password"
         onChange={(e) => setPassword(e.target.value)}
       />{" "}
+      <input
+        type="file"
+        onChange={(e) => {
+          e.target.files && setAvatarFile(e.target.files[0]);
+        }}
+      />
       <button>Create!</button>
     </form>
   );
