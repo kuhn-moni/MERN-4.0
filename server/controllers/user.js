@@ -68,22 +68,22 @@ const createUser = async (req, res) => {
     res.status(400).json({ error: "All fields must be filled out" });
     return;
   }
-  const result = await imageUpload(req.file, "profile_pictures");
-  console.log(result);
-  const newUser = new UserModel({
-    email,
-    password,
-    username,
-    profile_pic: result,
-  });
   try {
-    const result = await newUser.save();
+    const result = await imageUpload(req.file, "profile_pictures");
+    console.log(result);
+    const newUser = new UserModel({
+      email,
+      password,
+      username,
+      profile_pic: result,
+    });
+    const createdUser = await newUser.save();
     const forFront = {
-      email: result.email,
-      username: result.username,
-      _id: result._id,
-      createdAt: result.createdAt,
-      profile_pic: result.profile_pic,
+      email: createdUser.email,
+      username: createdUser.username,
+      _id: createdUser._id,
+      createdAt: createdUser.createdAt,
+      profile_pic: createdUser.profile_pic,
     };
     res.status(200).json(forFront);
   } catch (e) {
