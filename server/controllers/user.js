@@ -17,16 +17,19 @@ const findAllUsers = async (request, response) => {
     const users = await UserModel.find().populate("sports_activities");
     if (users) {
       const forFront = [];
-      users.forEach((user) =>
-        forFront.push({
+      users.forEach((user) => {
+        const userObj = {
           email: user.email,
           username: user.username,
           createdAt: user.createdAt,
           _id: user._id,
-          sports_activities: user.sports_activities,
           profile_pic: user.profile_pic,
-        })
-      );
+        };
+        if (user.sports_activities) {
+          userObj.sports_activities = user.sports_activities;
+        }
+        forFront.push(userObj);
+      });
       response.status(200).json(forFront);
     } else {
       response.status(404).json({ error: "No users found" });

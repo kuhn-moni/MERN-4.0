@@ -15,16 +15,16 @@ function CreateUserForm({
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   const createUser = async () => {
-    const urlencoded = new URLSearchParams();
-    urlencoded.append("email", email);
-    urlencoded.append("password", password);
-    urlencoded.append("username", username);
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("username", username);
     if (avatarFile) {
-      urlencoded.append("image", avatarFile);
+      formData.append("image", avatarFile);
     }
     const requestOptions = {
       method: "POST",
-      body: urlencoded,
+      body: formData,
     };
     try {
       const response = await fetch(

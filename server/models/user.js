@@ -15,7 +15,6 @@ const userSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "sports_activities",
-        required: true,
       },
     ],
   },
