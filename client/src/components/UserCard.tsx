@@ -15,7 +15,7 @@ function UserCard({ user }: Props) {
           <img
             src={user.profile_pic}
             alt={`${user.username}'s profile picture`}
-            style={{ height: "50px", width: "50px" }}
+            style={{ height: "70px", width: "70px" }}
           />
         </p>
         {user.sports_activities.length === 0 ? (
