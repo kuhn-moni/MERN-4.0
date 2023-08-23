@@ -124,6 +124,30 @@ const updateUser = async (req, res) => {
   }
 };
 
+const findUserById = async (req, res) => {
+  const { _id } = req.params;
+  if (_id) {
+    try {
+      const foundUser = await UserModel.findOne({ _id: _id });
+      if (foundUser) {
+        const forFront = {
+          email: foundUser.email,
+          username: foundUser.username,
+          _id: foundUser._id,
+          createdAt: foundUser.createdAt,
+        };
+        res.status(200).json(forFront);
+      } else {
+        res.status(404).json({ error: "No participants found" });
+      }
+    } catch (e) {
+      res.status(500).json({ error: "Something went wrong" });
+    }
+  } else {
+    res.status(400).json({ error: "No participants found" });
+  }
+};
+
 export {
   testResponse,
   middleTest,
@@ -131,4 +155,5 @@ export {
   findUserByEmail,
   createUser,
   updateUser,
+  findUserById,
 };

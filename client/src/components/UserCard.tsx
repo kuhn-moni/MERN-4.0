@@ -1,10 +1,42 @@
-import { User } from "../@types";
+import { useEffect, useState } from "react";
+import { NotOk, User, Users } from "../@types";
 
 type Props = {
   user: User;
 };
 
 function UserCard({ user }: Props) {
+  const [participant, setParticpant] = useState<Users>([]);
+
+  useEffect(() => {
+    const fetchUsersWithId = (user: User) => {
+      if (user.sports_activities) {
+        user.sports_activities.map(async (sport_activity) => {
+          try {
+            const response = await fetch(
+              `${import.meta.env.VITE_SERVER_BASE}api/users/_id/${
+                sport_activity.participants
+              }`
+            );
+            if (response.ok) {
+              const result = (await response.json()) as Users;
+              setParticpant(result);
+              console.log(result);
+            } else {
+              const result = (await response.json()) as NotOk;
+              alert(result.error);
+            }
+          } catch (error) {
+            console.log(error);
+            const { message } = error as Error;
+            alert(message);
+          }
+        });
+      }
+    };
+    fetchUsersWithId(user);
+  }, []);
+
   return (
     user && (
       <div
@@ -26,12 +58,18 @@ function UserCard({ user }: Props) {
             <ul>
               {user.sports_activities.map((p) => {
                 return (
-                  <li key={p._id}>
-                    {p.activity} on {p.date} for {p.duration} with{" "}
-                    {p.participant}
-                  </li>
+                  <div key={p._id}>
+                    <li>
+                      {p.activity} on {p.date} for {p.duration} with{" "}
+                    </li>
+                  </div>
                 );
               })}
+              <span>
+                {" "}
+                {participant && participant.username} -{" "}
+                {participant && participant.email}
+              </span>
             </ul>
           </>
         )}
