@@ -16,6 +16,6 @@ userRouter.get("/all", findAllUsers);
 userRouter.get("/email/:email", findUserByEmail);
 
 userRouter.post("/new", multerUpload.single("image"), createUser);
-userRouter.post("/update", updateUser);
+userRouter.post("/update", multerUpload.single("image"), updateUser);
 
 export default userRouter;

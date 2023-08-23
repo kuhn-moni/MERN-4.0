@@ -100,24 +100,24 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   console.log(req.file);
 
-  try {
-    if (req.file) {
-      const newProfilePic = await imageUpload(req.file, "profile_pictures");
-      const result = await UserModel.findByIdAndUpdate(
-        req.body._id,
-        { ...req.body, profile_pic: newProfilePic },
-        { new: true }
-      );
-      res.status(200).json(result);
-    } else {
-      const result = await UserModel.findByIdAndUpdate(req.body._id, req.body, {
-        new: true,
-      });
-      res.status(200).json(result);
-    }
-  } catch (e) {
-    res.status(500).json({ error: "Something went wrong..." });
-  }
+  // try {
+  //   if (req.file) {
+  //     const newProfilePic = await imageUpload(req.file, "profile_pictures");
+  //     const result = await UserModel.findByIdAndUpdate(
+  //       req.body._id,
+  //       { ...req.body, profile_pic: newProfilePic },
+  //       { new: true }
+  //     );
+  //     res.status(200).json(result);
+  //   } else {
+  //     const result = await UserModel.findByIdAndUpdate(req.body._id, req.body, {
+  //       new: true,
+  //     });
+  //     res.status(200).json(result);
+  //   }
+  // } catch (e) {
+  //   res.status(500).json({ error: "Something went wrong..." });
+  // }
 };
 
 export {
