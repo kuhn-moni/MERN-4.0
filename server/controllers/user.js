@@ -74,10 +74,10 @@ const createUser = async (req, res) => {
   }
   try {
     const result = await imageUpload(req.file, "profile_pictures");
-    const hashedPassword = encryptPassword(password);
+    const hashedPassword = await encryptPassword(password);
     const newUser = new UserModel({
       email,
-      password,
+      password: hashedPassword,
       username,
       profile_pic: result,
     });
