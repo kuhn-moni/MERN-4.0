@@ -10,3 +10,8 @@ export const encryptPassword = async (password) => {
     console.log("Error: ", error);
   }
 };
+
+export const verifyPassword = async (password, hashedPassword) => {
+  const verified = bcrypt.compare(password, hashedPassword);
+  return verified;
+};

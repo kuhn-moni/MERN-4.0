@@ -124,22 +124,6 @@ const updateUser = async (req, res) => {
   }
 };
 
-const updatePassword = async (req, res) => {
-  const { password: stringPassword, _id } = req.body;
-  try {
-    const hashedPassword = await encryptPassword(stringPassword);
-    console.log(stringPassword, _id, hashedPassword);
-    result = await UserModel.findByIdAndUpdate(
-      _id,
-      { password: hashedPassword },
-      { new: true }
-    );
-    res.status(200).json({ message: "password updated!" });
-  } catch (error) {
-    res.status(500).json({ error: "Something went wrong..." });
-  }
-};
-
 const findUserById = async (req, res) => {
   const { _id } = req.params;
   if (_id) {
@@ -161,6 +145,22 @@ const findUserById = async (req, res) => {
     }
   } else {
     res.status(400).json({ error: "No participants found" });
+  }
+};
+
+const updatePassword = async (req, res) => {
+  const { password: stringPassword, _id } = req.body;
+  try {
+    const hashedPassword = await encryptPassword(stringPassword);
+    console.log(stringPassword, _id, hashedPassword);
+    result = await UserModel.findByIdAndUpdate(
+      _id,
+      { password: hashedPassword },
+      { new: true }
+    );
+    res.status(200).json({ message: "password successfully updated!" });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong..." });
   }
 };
 
