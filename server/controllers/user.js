@@ -100,7 +100,6 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   console.log(req.file);
-
   try {
     if (req.file) {
       const newProfilePic = await imageUpload(req.file, "profile_pictures");
@@ -121,6 +120,22 @@ const updateUser = async (req, res) => {
       res.status(200).json(result);
     }
   } catch (e) {
+    res.status(500).json({ error: "Something went wrong..." });
+  }
+};
+
+const updatePassword = async (req, res) => {
+  const { password: stringPassword, _id } = req.body;
+  try {
+    const hashedPassword = await encryptPassword(stringPassword);
+    console.log(stringPassword, _id, hashedPassword);
+    result = await UserModel.findByIdAndUpdate(
+      _id,
+      { password: hashedPassword },
+      { new: true }
+    );
+    res.status(200).json({ message: "password updated!" });
+  } catch (error) {
     res.status(500).json({ error: "Something went wrong..." });
   }
 };
@@ -157,4 +172,5 @@ export {
   createUser,
   updateUser,
   findUserById,
+  updatePassword,
 };
