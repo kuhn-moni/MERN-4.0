@@ -1,5 +1,5 @@
 import { UserModel } from "../models/user.js";
-import { encryptPassword } from "../utilities/bcrypt.js";
+import { encryptPassword, verifyPassword } from "../utilities/bcrypt.js";
 import { imageUpload } from "../utilities/imageManagement.js";
 
 const testResponse = (req, res) => {
@@ -168,13 +168,17 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const existingUser = await UserModel.findOne({ email });
-    if (existingUser)
-      return res.status(404).json({ error: "No users with that email." });
+    if (!existingUser)
+      return res.status(404).json({ error: "No user with that email." });
+    const verified = await verifyPassword(password, existingUser.password);
+    if (!verified)
+      return res.status(401).json({ error: "Password doesn't match." });
+    const token = generateToken(existingUser);
+    res.status(200).json({ verified, token });
   } catch (error) {
     res.status(500).json({ error: "Something went wrong..." });
   }
 };
-
 export {
   testResponse,
   middleTest,
