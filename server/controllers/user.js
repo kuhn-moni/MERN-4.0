@@ -1,4 +1,5 @@
 import { UserModel } from "../models/user.js";
+import { encryptPassword } from "../utilities/bcrypt.js";
 import { imageUpload } from "../utilities/imageManagement.js";
 
 const testResponse = (req, res) => {
@@ -73,7 +74,7 @@ const createUser = async (req, res) => {
   }
   try {
     const result = await imageUpload(req.file, "profile_pictures");
-    console.log(result);
+    const hashedPassword = encryptPassword(password);
     const newUser = new UserModel({
       email,
       password,
