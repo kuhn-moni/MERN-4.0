@@ -164,6 +164,17 @@ const updatePassword = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser)
+      return res.status(404).json({ error: "No users with that email." });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong..." });
+  }
+};
+
 export {
   testResponse,
   middleTest,
@@ -173,4 +184,5 @@ export {
   updateUser,
   findUserById,
   updatePassword,
+  login,
 };
