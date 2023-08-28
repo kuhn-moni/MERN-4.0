@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import { NotOk } from "../@types/index";
 
 interface LoginResult {
   verified: boolean;
@@ -26,12 +27,20 @@ const Login = () => {
     fetch(`${baseURL}api/users/login`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        const { token } = result as LoginResult;
-        console.log(token);
-        localStorage.setItem("token", token);
-        console.log("user verified and token saved");
+        if (result.token) {
+          const { token } = result as LoginResult;
+          console.log(token);
+          localStorage.setItem("token", token);
+          console.log("user verified and token saved");
+        } else {
+          const { error } = result as NotOk;
+
+          alert(error);
+        }
       })
       .catch((error) => console.log("error", error));
+    setEmail("");
+    setPassword("");
   };
   return (
     <div>

@@ -169,18 +169,35 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const existingUser = await UserModel.findOne({ email });
-    if (!existingUser)
+    if (!existingUser) {
       return res.status(404).json({ error: "No user with that email." });
+    }
     const verified = await verifyPassword(password, existingUser.password);
-    if (!verified)
-      return res.status(401).json({ error: "Password doesn't match." });
+    if (!verified) {
+      return res.status(401).json({
+        error: "Password doesn't match.",
+        verified: verified,
+      });
+    }
     const token = generateToken(existingUser);
-    console.log(token);
-    res.status(200).json({ verified, token });
+    const forFront = {
+      email: existingUser.email,
+      _id: existingUser._id,
+      username: existingUser.username,
+      createdAt: existingUser.createdAt,
+      profile_pic: existingUser.profile_pic,
+    };
+    console.log(forFront);
+    res.status(200).json({
+      verified: verified,
+      token: token,
+      user: forFront,
+    });
   } catch (error) {
     res.status(500).json({ error: "Something went wrong..." });
   }
 };
+
 export {
   testResponse,
   middleTest,
