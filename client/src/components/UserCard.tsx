@@ -21,7 +21,7 @@ function UserCard({ user }: Props) {
             if (response.ok) {
               const result = (await response.json()) as Users;
               setParticpant(result);
-              console.log(result);
+              // console.log(result);
             } else {
               const result = (await response.json()) as NotOk;
               alert(result.error);
@@ -35,7 +35,7 @@ function UserCard({ user }: Props) {
       }
     };
     fetchUsersWithId(user);
-  }, []);
+  }, [user]);
 
   return (
     user && (
