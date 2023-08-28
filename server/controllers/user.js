@@ -198,6 +198,10 @@ const login = async (req, res) => {
   }
 };
 
+const getMe = async (req, res) => {
+  res.send("connected!");
+};
+
 export {
   testResponse,
   middleTest,
@@ -208,4 +212,5 @@ export {
   findUserById,
   updatePassword,
   login,
+  getMe,
 };

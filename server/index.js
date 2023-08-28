@@ -2,9 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import userRouter from "./routes/user.js";
-import * as dotenv from "dotenv";
 import activitiesRouter from "./routes/sports_activities.js";
 import configureCloudinary from "./config/cloudinary.js";
+import * as dotenv from "dotenv";
+import configurePassport from "./config/passport.js";
 dotenv.config();
 
 console.log("MOGO_URI", process.env.MONGO_URI);
@@ -21,6 +22,7 @@ const connectMiddlewares = () => {
   );
   app.use(cors());
   configureCloudinary();
+  configurePassport();
 };
 
 const connectDatabase = async () => {
