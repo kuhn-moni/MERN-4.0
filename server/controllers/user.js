@@ -1,6 +1,7 @@
 import { UserModel } from "../models/user.js";
 import { encryptPassword, verifyPassword } from "../utilities/bcrypt.js";
 import { imageUpload } from "../utilities/imageManagement.js";
+import { generateToken } from "../utilities/jwt.js";
 
 const testResponse = (req, res) => {
   res.send("We have a response!!!!!!");
@@ -174,6 +175,7 @@ const login = async (req, res) => {
     if (!verified)
       return res.status(401).json({ error: "Password doesn't match." });
     const token = generateToken(existingUser);
+    console.log(token);
     res.status(200).json({ verified, token });
   } catch (error) {
     res.status(500).json({ error: "Something went wrong..." });

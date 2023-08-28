@@ -6,6 +6,8 @@ interface LoginResult {
 }
 
 const Login = () => {
+  const baseURL = import.meta.env.VITE_SERVER_BASE as string;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,10 +23,11 @@ const Login = () => {
       headers: myHeaders,
       body: urlencoded,
     };
-    fetch(`${import.meta.env.VITE_SERVER_BASE}api/users/login`, requestOptions)
+    fetch(`${baseURL}api/users/login`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         const { token } = result as LoginResult;
+        console.log(token);
         localStorage.setItem("token", token);
         console.log("user verified and token saved");
       })
