@@ -5,6 +5,7 @@ import CreateUserForm from "./components/CreatedUserFrom";
 import UserCard from "./components/UserCard";
 
 function App() {
+  const baseURL = import.meta.env.VITE_SERVER_BASE as string;
   const [users, setUsers] = useState<Users>([]);
 
   console.log(import.meta.env.VITE_SERVER_BASE);
@@ -12,9 +13,7 @@ function App() {
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_BASE}api/users/all`
-        );
+        const response = await fetch(`${baseURL}api/users/all`);
         if (response.ok) {
           const result = (await response.json()) as Users;
           setUsers(result);
@@ -30,7 +29,7 @@ function App() {
       }
     };
     fetchAllUsers().catch((e) => console.log(e));
-  }, []);
+  }, [baseURL]);
 
   return (
     <div
