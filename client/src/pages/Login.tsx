@@ -1,57 +1,44 @@
-import { FormEvent, useState } from "react";
-import { NotOk } from "../@types/index";
-
-interface LoginResult {
-  verified: boolean;
-  token: string;
-}
+import { FormEvent, useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
-  const baseURL = import.meta.env.VITE_SERVER_BASE as string;
-
+  const { login } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-    const urlencoded = new URLSearchParams();
-    urlencoded.append("email", email);
-    urlencoded.append("password", password);
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: urlencoded,
-    };
-    fetch(`${baseURL}api/users/login`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.token) {
-          const { token } = result as LoginResult;
-          console.log(token);
-          localStorage.setItem("token", token);
-          console.log("user verified and token saved");
-        } else {
-          const { error } = result as NotOk;
-
-          alert(error);
-        }
-      })
-      .catch((error) => console.log("error", error));
-    setEmail("");
+    await login(email, password);
     setPassword("");
+    setEmail("");
   };
+
+  const formStyle: React.CSSProperties = {
+    border: "solid black 1px",
+    width: "350px",
+    padding: "1em",
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "1em",
+  };
+
+  const displayCenter: React.CSSProperties = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "1em",
+  };
+
   return (
-    <div>
+    <div style={displayCenter}>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <form onSubmit={handleSubmit} style={displayCenter}>
+        <div style={formStyle}>
+          <label>Enter your email</label>
+          <input value={email} onChange={(e) => setEmail(e.target.value)} />
+          <label>Enter your password</label>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </div>
         <button type="submit">Login</button>
       </form>
     </div>

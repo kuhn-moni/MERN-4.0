@@ -5,7 +5,7 @@ export interface NotOk {
 export interface sports_activities {
   _id: string;
   organiser: string;
-  participants: string;
+  participants: string | User;
   activity: string;
   duration: string;
   date: string;
