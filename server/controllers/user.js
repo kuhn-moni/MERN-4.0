@@ -199,7 +199,7 @@ const login = async (req, res) => {
 };
 
 const getMe = async (req, res) => {
-  res.send("connected!");
+  res.status(200).json(req.user);
 };
 
 export {
