@@ -93,9 +93,7 @@ const createUser = async (req, res) => {
     res.status(200).json(forFront);
   } catch (e) {
     console.log(e);
-    e.code === 11000
-      ? res.status(406).json({ error: "That email is already registered" })
-      : res.status(500).json({ error: "Unknown error occured" });
+    e.code === 11000 ? res.status(406).json({ error: "That email is already registered" }) : res.status(500).json({ error: "Unknown error occured" });
   }
 };
 
@@ -105,19 +103,11 @@ const updateUser = async (req, res) => {
     if (req.file) {
       const newProfilePic = await imageUpload(req.file, "profile_pictures");
       const { password, ...updatedData } = req.body; // Exclude the password from the updatedData object
-      const result = await UserModel.findByIdAndUpdate(
-        req.body._id,
-        { ...updatedData, profile_pic: newProfilePic },
-        { new: true }
-      ).select("-password"); // Exclude the password field from the returned document
+      const result = await UserModel.findByIdAndUpdate(req.body._id, { ...updatedData, profile_pic: newProfilePic }, { new: true }).select("-password"); // Exclude the password field from the returned document
       res.status(200).json(result);
     } else {
       const { password, ...updatedData } = req.body; // Exclude the password from the updatedData object
-      const result = await UserModel.findByIdAndUpdate(
-        req.body._id,
-        updatedData,
-        { new: true }
-      ).select("-password"); // Exclude the password field from the returned document
+      const result = await UserModel.findByIdAndUpdate(req.body._id, updatedData, { new: true }).select("-password"); // Exclude the password field from the returned document
       res.status(200).json(result);
     }
   } catch (e) {
@@ -154,11 +144,7 @@ const updatePassword = async (req, res) => {
   try {
     const hashedPassword = await encryptPassword(stringPassword);
     console.log(stringPassword, _id, hashedPassword);
-    result = await UserModel.findByIdAndUpdate(
-      _id,
-      { password: hashedPassword },
-      { new: true }
-    );
+    result = await UserModel.findByIdAndUpdate(_id, { password: hashedPassword }, { new: true });
     res.status(200).json({ message: "password successfully updated!" });
   } catch (error) {
     res.status(500).json({ error: "Something went wrong..." });
@@ -199,18 +185,16 @@ const login = async (req, res) => {
 };
 
 const getMe = async (req, res) => {
-  res.status(200).json(req.user);
+  // res.status(200).json(req.user) // full user, including private data
+  const forFront = {
+    email: req.user.email,
+    username: req.user.username,
+    _id: req.user._id,
+    createdAt: req.user.createdAt,
+    profile_pic: req.user.profile_pic,
+    sports_activities: req.user.sports_activities,
+  };
+  res.status(200).json(forFront); // return new object with only chosen properties
 };
 
-export {
-  testResponse,
-  middleTest,
-  findAllUsers,
-  findUserByEmail,
-  createUser,
-  updateUser,
-  findUserById,
-  updatePassword,
-  login,
-  getMe,
-};
+export { testResponse, middleTest, findAllUsers, findUserByEmail, createUser, updateUser, findUserById, updatePassword, login, getMe };
