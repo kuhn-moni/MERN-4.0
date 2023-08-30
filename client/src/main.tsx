@@ -7,6 +7,7 @@ import WithNav from "./components/layouts/WithNav.tsx";
 import Login from "./pages/Login.tsx";
 import App from "./App.tsx";
 import { AuthContextProvider } from "./context/AuthContext.tsx";
+import Booking from "./pages/Booking.tsx";
 // import './index.css'
 
 const router = createBrowserRouter([
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
           {
             path: "/login",
             element: <Login />,
+          },
+          {
+            path: "/booking",
+            element: <Booking />,
           },
         ],
       },

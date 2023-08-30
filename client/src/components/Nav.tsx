@@ -37,6 +37,9 @@ function Nav() {
         <NavLink to="/login" style={({ isActive }) => (isActive ? activeLink : {})}>
           Login
         </NavLink>
+        <NavLink to="/booking" style={({ isActive }) => (isActive ? activeLink : {})}>
+          Booking
+        </NavLink>
       </div>
       <p>{user ? <button onClick={logout}>Logout</button> : "User is logged out"}</p>
     </nav>
