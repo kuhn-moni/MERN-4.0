@@ -20,7 +20,4 @@ const activiesSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const activitiesModel = mongoose.model(
-  "sports_activities",
-  activiesSchema
-);
+export const activitiesModel = mongoose.model("sports_activities", activiesSchema);
