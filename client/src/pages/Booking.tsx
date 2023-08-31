@@ -10,7 +10,7 @@ const CreateActivityForm = () => {
   const createActivity = async () => {
     const activityData = {
       organiser,
-      participants: participants.split(","),
+      participants: participants,
       activity,
       duration,
       date,
