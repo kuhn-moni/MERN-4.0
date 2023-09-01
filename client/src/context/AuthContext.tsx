@@ -75,7 +75,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         const response = await fetch(`${baseURL}api/users/me`, requestOptions);
         const result = (await response.json()) as User;
         setUser(result);
-        console.log("active user", result);
+        // console.log("active user", result);
       } catch (error) {
         console.log(error);
       }
@@ -83,6 +83,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
       setUser(null);
     }
   };
+  console.log("active user", user);
 
   useEffect(() => {
     getActiveUser().catch((e) => console.log(e));

@@ -11,7 +11,7 @@ const findAllActivities = async (req, res) => {
     res.status(500).json({ error: "Something went wrong..." });
   }
 
-  res.send("testing...");
+  // res.send("testing...");
 };
 
 const createActivity = async (req, res) => {
