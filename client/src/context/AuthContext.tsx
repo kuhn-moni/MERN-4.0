@@ -11,10 +11,14 @@ interface DefaultValue {
   user: null | User;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 
 const initialValue: DefaultValue = {
   user: null,
+  setUser: () => {
+    throw new Error("context not implemented.");
+  },
   login: () => {
     throw new Error("context not implemented.");
   },
@@ -89,5 +93,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     getActiveUser().catch((e) => console.log(e));
   }, []);
 
-  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+  // added setUser to value so we can update user state from other components
+  return <AuthContext.Provider value={{ user, setUser, login, logout }}>{children}</AuthContext.Provider>; 
 };
