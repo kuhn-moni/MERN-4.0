@@ -1,15 +1,17 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const CreateActivityForm = () => {
-  const [organiser, setOrganiser] = useState("");
-  const [participants, setParticipants] = useState("");
+  //   const [organiser, setOrganiser] = useState("");
+  const { user } = useContext(AuthContext);
+  const [participants, setParticipants] = useState([]);
   const [activity, setActivity] = useState("");
   const [duration, setDuration] = useState("");
   const [date, setDate] = useState("");
 
   const createActivity = async () => {
     const activityData = {
-      organiser,
+      organiser: user?._id,
       participants: participants,
       activity,
       duration,
@@ -29,8 +31,8 @@ const CreateActivityForm = () => {
         const result = await response.json();
         alert("Activity created!");
         console.log(result);
-        setOrganiser("");
-        setParticipants("");
+        // setOrganiser("");
+        // setParticipants("");
         setActivity("");
         setDuration("");
         setDate("");
@@ -52,10 +54,10 @@ const CreateActivityForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <h3>Create new Activity:</h3>
-      <label>
+      {/* <label>
         Organiser:
         <input type="text" value={organiser} onChange={(e) => setOrganiser(e.target.value)} />
-      </label>
+      </label> */}
       <br />
       <label>
         Participants:
