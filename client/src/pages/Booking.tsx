@@ -19,7 +19,7 @@ const CreateActivityForm = () => {
       participants: participants,
       activity,
       duration,
-      date,
+      date: date.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "2-digit" }),
     };
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_BASE}api/activities/new`, {
@@ -91,7 +91,7 @@ const CreateActivityForm = () => {
         <br />
         <label>
           Date:
-          <DatePicker selected={date} onChange={(date) => setDate(date)} />
+          <DatePicker selected={date} onChange={(date) => setDate(date)} dateFormat="dd/MM/yy" />
         </label>
         <br />
         <button type="submit">Create!</button>
