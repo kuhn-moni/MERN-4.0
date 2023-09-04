@@ -2,15 +2,16 @@ import { useState, FormEvent, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import ActivityView from "../components/ActivityView";
 import { Sports_activity } from "../@types";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const CreateActivityForm = () => {
-  //   const [organiser, setOrganiser] = useState("");
   const { user } = useContext(AuthContext);
   const [participants, setParticipants] = useState([]);
   const [activities, setActivities] = useState<Sports_activity[]>([]);
   const [activity, setActivity] = useState("");
   const [duration, setDuration] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date());
 
   const createActivity = async () => {
     const activityData = {
@@ -32,11 +33,9 @@ const CreateActivityForm = () => {
         const result = await response.json();
         alert("Activity created!");
         console.log(result);
-        // setOrganiser("");
-        // setParticipants("");
         setActivity("");
         setDuration("");
-        setDate("");
+        setDate(new Date());
       } else {
         const error = await response.json();
         alert(error.message);
@@ -74,10 +73,6 @@ const CreateActivityForm = () => {
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: 30 }}>
       <form onSubmit={handleSubmit}>
         <h3>Create new Activity:</h3>
-        {/* <label>
-        Organiser:
-        <input type="text" value={organiser} onChange={(e) => setOrganiser(e.target.value)} />
-      </label> */}
         <br />
         <label>
           Participants:
@@ -96,7 +91,7 @@ const CreateActivityForm = () => {
         <br />
         <label>
           Date:
-          <input type="text" value={date} onChange={(e) => setDate(e.target.value)} />
+          <DatePicker selected={date} onChange={(date) => setDate(date)} />
         </label>
         <br />
         <button type="submit">Create!</button>
