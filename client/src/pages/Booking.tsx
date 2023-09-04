@@ -1,6 +1,7 @@
 import { useState, FormEvent, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { User } from "../@types";
+import Heatmap from "../components/Heatmap";
 
 const CreateActivityForm = () => {
   //   const [organiser, setOrganiser] = useState("");
@@ -97,10 +98,6 @@ const CreateActivityForm = () => {
       }
 
     <form onSubmit={handleSubmit}>
-      {/* <label>
-        Organiser:
-        <input type="text" value={organiser} onChange={(e) => setOrganiser(e.target.value)} />
-      </label> */}
       <br />
       <br />
       <label>
@@ -120,6 +117,7 @@ const CreateActivityForm = () => {
       <br />
       <button type="submit">Create!</button>
     </form>
+    <Heatmap />
     </>
   );
 };

@@ -21,3 +21,24 @@ export interface User {
 }
 
 export type Users = User[];
+
+interface Activity {
+  organiser: string,
+  activity: string,
+  date: string
+}
+
+type Activities = Activity[]
+
+type DataList = Activities[]
+
+type DataListList = DataList[]
+
+type Data = number[][]
+
+interface TestUser {
+  name: string,
+  activities: Activities
+}
+
+type UserInfoArray = { yLabel: string, activityList: DataList }[]
