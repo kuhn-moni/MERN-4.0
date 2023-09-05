@@ -69,6 +69,11 @@ const CreateActivityForm = () => {
     e.preventDefault();
     await createActivity();
   };
+
+  const handleRemoveParticipant = (participant: User) => {
+    setParticipants(participants.filter((p) => p._id !== participant._id));
+  };
+
   const FindUser = async () => {
     console.log(userToFind);
     try {
@@ -82,6 +87,7 @@ const CreateActivityForm = () => {
       console.log(error);
     }
   };
+
   return (
     <div>
       <label>
@@ -91,7 +97,10 @@ const CreateActivityForm = () => {
       <button onClick={FindUser}>Find User</button>
       <ul>
         {participants.map((p) => (
-          <li key={p._id}>{p.username}</li>
+          <li key={p._id}>
+            {p.username}
+            <button onClick={() => handleRemoveParticipant(p)}>Remove</button>
+          </li>
         ))}
       </ul>
 
