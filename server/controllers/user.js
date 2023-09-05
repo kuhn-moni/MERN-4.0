@@ -45,15 +45,9 @@ const findUserByEmail = async (req, res) => {
   const { email } = req.params;
   if (email && email.includes("@")) {
     try {
-      const foundUser = await UserModel.findOne({ email: email });
+      const foundUser = await UserModel.findOne({ email: email }).select("-password");
       if (foundUser) {
-        const forFront = {
-          email: foundUser.email,
-          username: foundUser.username,
-          _id: foundUser._id,
-          createdAt: foundUser.createdAt,
-        };
-        res.status(200).json(forFront);
+        res.status(200).json(foundUser);
       } else {
         res.status(404).json({ error: "No user found" });
       }

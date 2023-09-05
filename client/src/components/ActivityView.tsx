@@ -5,9 +5,9 @@ interface ActivityViewProps {
 }
 
 const ActivityView = ({ activityProps }: ActivityViewProps) => {
-  const { organiser, participants, activity, duration, date } = activityProps;
+  const { organiser, participants, activity, duration, date, _id } = activityProps;
   return (
-    <div>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: 30 }}>
       <p>Activitiy</p>
       <span>Organiser: {organiser.username}</span>
       <>

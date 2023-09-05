@@ -1,4 +1,5 @@
 import { activitiesModel } from "../models/sports_activities.js";
+import { UserModel } from "../models/user.js";
 
 const findAllActivities = async (req, res) => {
   try {
@@ -19,18 +20,21 @@ const findAllActivities = async (req, res) => {
 
 const createActivity = async (req, res) => {
   console.log(req.body);
-  const testing = {
+  const particpantIds = req.body.participants.map((p) => p._id);
+  const newActivity = {
     organiser: req.body.organiser,
-    participants: req.body.participants.split(","),
+    participants: particpantIds,
     activity: req.body.activity,
     duration: req.body.duration,
     date: req.body.date,
   };
-  console.log(testing);
-  try {
-    const newActivity = new activitiesModel(testing);
-    const createdActivity = await newActivity.save();
 
+  try {
+    const createdActivity = await activitiesModel.create(newActivity);
+    const organiser = await UserModel.findByIdAndUpdate(req.body.organiser, { $push: { sports_activities: createdActivity._id } });
+    particpantIds.forEach(async (p) => {
+      await UserModel.findByIdAndUpdate(p, { $push: { sports_activities: createdActivity._id } });
+    });
     res.status(200).json(createdActivity);
   } catch (e) {
     console.log(e);

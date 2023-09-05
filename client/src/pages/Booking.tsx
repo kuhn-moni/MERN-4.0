@@ -1,17 +1,18 @@
 import { useState, FormEvent, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import ActivityView from "../components/ActivityView";
-import { Sports_activity } from "../@types";
+import { Sports_activity, User } from "../@types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const CreateActivityForm = () => {
   const { user } = useContext(AuthContext);
-  const [participants, setParticipants] = useState([]);
+  const [participants, setParticipants] = useState<User[]>([]);
+  const [userToFind, setUserToFind] = useState("");
   const [activities, setActivities] = useState<Sports_activity[]>([]);
   const [activity, setActivity] = useState("");
   const [duration, setDuration] = useState("");
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<Date | null>(new Date());
 
   const createActivity = async () => {
     const activityData = {
@@ -19,7 +20,7 @@ const CreateActivityForm = () => {
       participants: participants,
       activity,
       duration,
-      date: date.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "2-digit" }),
+      date: date?.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "2-digit" }),
     };
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_BASE}api/activities/new`, {
@@ -68,16 +69,36 @@ const CreateActivityForm = () => {
     e.preventDefault();
     await createActivity();
   };
-
+  const FindUser = async () => {
+    console.log(userToFind);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_BASE}api/users/email/${userToFind}`);
+      if (!res.ok) alert("No user");
+      else {
+        const result = (await res.json()) as User;
+        setParticipants([...participants, result]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: 30 }}>
+    <div>
+      <label>
+        Participants:
+        <input type="text" value={userToFind} onChange={(e) => setUserToFind(e.target.value)} />
+      </label>
+      <button onClick={FindUser}>Find User</button>
+      <ul>
+        {participants.map((p) => (
+          <li key={p._id}>{p.username}</li>
+        ))}
+      </ul>
+
       <form onSubmit={handleSubmit}>
         <h3>Create new Activity:</h3>
         <br />
-        <label>
-          Participants:
-          <input type="text" value={participants} onChange={(e) => setParticipants(e.target.value)} />
-        </label>
+
         <br />
         <label>
           Activity:
