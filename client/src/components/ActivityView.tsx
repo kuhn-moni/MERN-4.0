@@ -8,7 +8,7 @@ const ActivityView = ({ activityProps }: ActivityViewProps) => {
   const { organiser, participants, activity, duration, date } = activityProps;
   return (
     <div>
-      <p>ActivitiesView</p>
+      <p>Activitiy</p>
       <span>Organiser: {organiser.username}</span>
       <>
         <p>Participants:</p>
