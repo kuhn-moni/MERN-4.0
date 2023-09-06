@@ -1,3 +1,4 @@
+import { activitiesModel } from "../models/sports_activities.js";
 import { UserModel } from "../models/user.js";
 import { encryptPassword, verifyPassword } from "../utilities/bcrypt.js";
 import { imageUpload } from "../utilities/imageManagement.js";
@@ -45,7 +46,7 @@ const findUserByEmail = async (req, res) => {
   const { email } = req.params;
   if (email && email.includes("@")) {
     try {
-      const foundUser = await UserModel.findOne({ email: email });
+      const foundUser = await UserModel.findOne({ email: email }).select("-password").populate("sports_activities");
       if (foundUser) {
         const forFront = {
           email: foundUser.email,
@@ -53,7 +54,7 @@ const findUserByEmail = async (req, res) => {
           _id: foundUser._id,
           createdAt: foundUser.createdAt,
         };
-        res.status(200).json(forFront);
+        res.status(200).json(foundUser);
       } else {
         res.status(404).json({ error: "No user found" });
       }
@@ -186,15 +187,21 @@ const login = async (req, res) => {
 
 const getMe = async (req, res) => {
   // res.status(200).json(req.user) // full user, including private data
-  const forFront = {
-    email: req.user.email,
-    username: req.user.username,
-    _id: req.user._id,
-    createdAt: req.user.createdAt,
-    profile_pic: req.user.profile_pic,
-    sports_activities: req.user.sports_activities,
-  };
-  res.status(200).json(forFront); // return new object with only chosen properties
+  try {
+    await req.user.populate("sports_activities");
+    const forFront = {
+      email: req.user.email,
+      username: req.user.username,
+      _id: req.user._id,
+      createdAt: req.user.createdAt,
+      profile_pic: req.user.profile_pic,
+      sports_activities: req.user.sports_activities
+    };
+    console.log(forFront)
+    res.status(200).json(forFront); // return new object with only chosen properties
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export { testResponse, middleTest, findAllUsers, findUserByEmail, createUser, updateUser, findUserById, updatePassword, login, getMe };

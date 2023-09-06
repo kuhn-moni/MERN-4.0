@@ -21,6 +21,7 @@ export interface Sports_activity {
   activity: string;
   duration: string;
   date: string;
+  createdAt: string
 }
 
 export interface User {
@@ -33,3 +34,24 @@ export interface User {
 }
 
 export type Users = User[];
+
+interface Activity {
+  organiser: string,
+  activity: string,
+  date: string
+}
+
+type Activities = Activity[]
+
+type DataList = Activities[]
+
+type DataListList = DataList[]
+
+type Data = number[][]
+
+interface TestUser {
+  username: string,
+  sports_activities: Activities
+}
+
+type UserInfoArray = { yLabel: string, activityList: DataList }[]
