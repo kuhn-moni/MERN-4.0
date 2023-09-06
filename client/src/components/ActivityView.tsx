@@ -15,7 +15,17 @@ const ActivityView = ({ activityProps }: ActivityViewProps) => {
   return (
     <div className={`d-flex flex-row flex-wrap justify-content-between mb-3 ${isCreatedByCurrentUser ? "green-tick" : ""}`}>
       <div
-        style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "column", gap: 10, border: "solid 2px", width: "15rem", flex: "0 0 33%" }}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexDirection: "column",
+          gap: 10,
+          border: "solid 2px",
+          width: "15rem",
+          flex: "0 0 33%",
+          backgroundColor: participants.some((participant: User) => participant.email === user?.email) ? "teal" : "",
+        }}
       >
         <p>Activity</p>
         <span>Organiser: {organiser.username}</span>
@@ -23,7 +33,7 @@ const ActivityView = ({ activityProps }: ActivityViewProps) => {
           <p>Participants:</p>
           <ul>
             {participants.map((participant: User, idx: number) => (
-              <li key={idx}>{(participant as User).username && (participant as User).email}</li>
+              <li key={idx}>{(participant as User).username}</li>
             ))}
           </ul>
         </>
