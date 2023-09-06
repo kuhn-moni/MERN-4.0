@@ -4,6 +4,7 @@ import ActivityView from "../components/ActivityView";
 import { Sports_activity, User } from "../@types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import CalendarHeatmapModal from "../components/CalendarHeatMapModal";
 
 const CreateActivityForm = () => {
   const { user } = useContext(AuthContext);
@@ -13,6 +14,7 @@ const CreateActivityForm = () => {
   const [activity, setActivity] = useState("");
   const [duration, setDuration] = useState("");
   const [date, setDate] = useState<Date | null>(new Date());
+  const [showModal, setShowModal] = useState(false);
 
   const createActivity = async () => {
     const activityData = {
@@ -88,8 +90,29 @@ const CreateActivityForm = () => {
     }
   };
 
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
   return (
     <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <button
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+          onClick={handleOpenModal}
+        >
+          View Heatmap
+        </button>
+      </div>
+      {showModal && <CalendarHeatmapModal onClose={() => setShowModal(false)} />}
+
       <label>
         Participants:
         <input type="text" value={userToFind} onChange={(e) => setUserToFind(e.target.value)} />
