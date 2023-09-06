@@ -112,12 +112,12 @@ const CreateActivityForm = () => {
       <br />
       <label>
         Date:
-        <input type="text" value={date} onChange={(e) => setDate(e.target.value)} />
+        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
       </label>
       <br />
       <button type="submit">Create!</button>
     </form>
-    <Heatmap />
+    { user && <Heatmap />}
     </>
   );
 };

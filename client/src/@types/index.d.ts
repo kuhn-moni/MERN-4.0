@@ -9,6 +9,7 @@ export interface sports_activities {
   activity: string;
   duration: string;
   date: string;
+  createdAt: string
 }
 
 export interface User {
@@ -37,8 +38,8 @@ type DataListList = DataList[]
 type Data = number[][]
 
 interface TestUser {
-  name: string,
-  activities: Activities
+  username: string,
+  sports_activities: Activities
 }
 
 type UserInfoArray = { yLabel: string, activityList: DataList }[]

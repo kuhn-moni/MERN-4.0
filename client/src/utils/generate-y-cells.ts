@@ -1,33 +1,25 @@
-import { Data, DataList, TestUser } from "../@types";
+import { Data, DataList, User } from "../@types";
 
 
-const generateY = (user: TestUser) => {
+const generateY = (user: User) => {
+  const today = new Date();
+  const weekStart = new Date(new Date(today.setDate(today.getDate() - (today.getDay()))).setHours(0, 0, 0));
+  const weekEnd = new Date(new Date(today.setDate(today.getDate() + (6 - today.getDay()))).setHours(23, 59, 59));
+  const thisWeeksActivities = user.sports_activities.filter((a) => {
+    const activityDate = new Date(a.date)
+    return activityDate <= weekEnd && activityDate >= weekStart
+  })
   const activityList: DataList = [[], [], [], [], [], [], []];
-  user.activities.forEach((a) => {
-    const day = a.date.slice(0,3);
-    switch (day) {
-      case "Mon": activityList[0].push(a);
-      break;
-      case "Tue": activityList[1].push(a);
-      break;
-      case "Wed": activityList[2].push(a);
-      break;
-      case "Thu": activityList[3].push(a);
-      break;
-      case "Fri": activityList[4].push(a);
-      break;
-      case "Sat": activityList[5].push(a);
-      break;
-      case "Sun": activityList[6].push(a);
-      break;
-    }
+  thisWeeksActivities.forEach((a) => {
+    const day = new Date(a.date).getDay();
+    activityList[day].push(a);
   })
   const data: Data = [[]];
   activityList.forEach((a) => {
     data[0].push(a.length);
   })
   return {
-    yLabel: user.name,
+    yLabel: user.username,
     activityList: activityList
   }
 }

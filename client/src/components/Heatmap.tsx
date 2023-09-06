@@ -1,52 +1,26 @@
 
 import { HeatMapGrid } from 'react-grid-heatmap'
 import { generateY } from '../utils/generate-y-cells';
-import { DataListList } from '../@types';
+import { DataListList, User } from '../@types';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 function Heatmap() {
-  const me = {
-    name: "me",
-    activities: [
-      { organiser: "user123", activity: "swimming", date: "Mon Aug 28 2023 17:30:00" },
-      { organiser: "user123", activity: "swimming", date: "Tue Aug 29 2023 17:30:00" },
-      { organiser: "user123", activity: "swimming", date: "Wed Aug 30 2023 17:30:00" },
-      { organiser: "user123", activity: "swimming", date: "Thu Aug 31 2023 17:30:00" },
-      { organiser: "user123", activity: "swimming", date: "Fri Sep 01 2023 17:30:00" },
-      { organiser: "user123", activity: "yoga", date: "Tue Aug 29 2023 18:30:00" },
-      { organiser: "user123", activity: "yoga", date: "Thu Aug 31 2023 18:30:00" },
-      { organiser: "user123", activity: "basketball", date: "Wed Aug 30 2023 18:30:00" },
-      { organiser: "user123", activity: "tennis", date: "Sat Sep 02 2023 10:00:00" },
-      { organiser: "user123", activity: "climbing", date: "Sat Sep 02 2023 12:30:00" },
-  ]}
-  const friend1 = {
-    name: "Moni",
-    activities: [
-      { organiser: "user123", activity: "swimming", date: "Tue Aug 29 2023 17:30:00" },
-      { organiser: "user123", activity: "swimming", date: "Wed Aug 30 2023 17:30:00" },
-      { organiser: "user123", activity: "swimming", date: "Thu Aug 31 2023 17:30:00" },
-      { organiser: "user123", activity: "swimming", date: "Fri Sep 01 2023 17:30:00" },
-      { organiser: "user123", activity: "yoga", date: "Tue Aug 29 2023 18:30:00" },
-      { organiser: "user123", activity: "yoga", date: "Thu Aug 31 2023 18:30:00" },
-      { organiser: "user123", activity: "basketball", date: "Wed Aug 30 2023 18:30:00" },
-      { organiser: "user123", activity: "tennis", date: "Sat Sep 02 2023 10:00:00" },
-      { organiser: "user123", activity: "climbing", date: "Sat Sep 02 2023 12:30:00" },
-      { organiser: "user123", activity: "tai chi", date: "Fri Sep 01 2023 18:30:00" },
-      { organiser: "user123", activity: "cycling", date: "Sat Sep 02 2023 14:30:00" },
-      { organiser: "user123", activity: "meditation", date: "Sun Sep 03 2023 08:30:00" },
-  ]}
-  const users = [me, friend1];
+  const { user } = useContext(AuthContext);
+  const [userToFind, setUserToFind] = useState("");
+  const [users, setUsers] = useState(user ? [user] : []);
 
-  const xLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  const xLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const yLabels: string[] = [];
-  const usersActivities: DataListList = [];
+  const usersActivities: DataListList = []; 
 
-  users.forEach((user) => {
-    const userInfo = generateY(user);
-    usersActivities.push(userInfo.activityList);
-    yLabels.push(userInfo.yLabel);
+  users.forEach((u) => {
+    if (u) {
+      const userInfo = generateY(u);
+      usersActivities.push(userInfo.activityList);
+      yLabels.push(userInfo.yLabel);
+    }
   })
-  console.log(yLabels)
-  console.log(usersActivities);
 
   const data = new Array(yLabels.length)
   .fill(0)
@@ -54,11 +28,22 @@ function Heatmap() {
     new Array(xLabels.length)
       .fill(0)
       .map((_, j) => {
-        console.log(usersActivities[i][j].length)
+        // console.log(usersActivities[i][j].length)
         return usersActivities[i][j].length
       })
   );
-  console.log(data)
+
+  const compareUser = async() => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_BASE}api/users/email/${userToFind}`);
+      if (!response.ok) return alert("No user found");
+      const result = await response.json() as User;
+      console.log(result);
+      setUsers([...users, result]);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <div>
@@ -94,12 +79,15 @@ function Heatmap() {
         cellHeight="1.5rem"
         xLabelsPos="top"
         onClick={(x, y) => {
-          alert(`Clicked (${x}, ${y})`);
+          // alert(`Clicked (${x}, ${y})`);
           console.log(usersActivities[x][y])
         }}
         // yLabelsPos="right"
         // square
       />
+      <p>Compare my activity heatmap against: </p>
+      <input value={userToFind} onChange={(e) => setUserToFind(e.target.value)}/>
+      <button onClick={compareUser}>Find User</button>
     </div>
   )
 }
