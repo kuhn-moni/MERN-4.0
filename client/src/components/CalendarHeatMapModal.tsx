@@ -1,46 +1,52 @@
-import React from "react";
+// import React, { useContext } from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
+// import { AuthContext } from "../context/AuthContext";
+import { User, Sports_activity } from "../@types";
 
 interface CalendarHeatmapModalProps {
   onClose: () => void;
+  user: User;
 }
 
-const CalendarHeatmapModal: React.FC<CalendarHeatmapModalProps> = ({ onClose }) => {
-  // Generate sample data for the heatmap
-  const startDate = new Date();
-  startDate.setFullYear(startDate.getFullYear() - 1);
-  const endDate = new Date();
-  const data = generateSampleData(startDate, endDate);
+interface dataObjectFull {
+  date: string;
+  count: Sports_activity[];
+}
+
+interface dataObject {
+  date: string;
+  count: number[];
+}
+
+const CalendarHeatmapModal: React.FC<CalendarHeatmapModalProps> = ({ onClose, user }) => {
+  //   const { user } = useContext(AuthContext);
+
+  // Generate heatmap data
+  const year = new Date().getFullYear();
+  console.log(year);
+  const startDate = new Date("01/01/" + year);
+  console.log(startDate);
+  const endDate = new Date(new Date("12/31/" + year).setHours(23, 59, 59));
+  console.log(endDate);
+  const data = generateHeatmapData(user);
+  console.log("dates", startDate, endDate);
 
   return (
     <div className="modal">
       <div className="modal-content">
-        <button
-          className="close-button"
-          onClick={onClose}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "red",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        >
+        <button className="close-button" onClick={onClose}>
           Close
         </button>
-        <h2>Activity Heatmap</h2>
         <CalendarHeatmap
           startDate={startDate}
           endDate={endDate}
           values={data}
-          showWeekdayLabels={true}
           classForValue={(value) => {
-            if (!value) {
-              return "color-empty";
+            if (value && value.count > 0) {
+              return `color-scale-${value.count}`;
             }
-            return `color-scale-${value.count}`;
+            return "color-empty";
           }}
         />
       </div>
@@ -48,16 +54,42 @@ const CalendarHeatmapModal: React.FC<CalendarHeatmapModalProps> = ({ onClose }) 
   );
 };
 
-// Helper function to generate sample data for the heatmap
-function generateSampleData(startDate: Date, endDate: Date) {
-  const data = [];
-  const currentDate = new Date(startDate);
-  while (currentDate <= endDate) {
-    const count = Math.floor(Math.random() * 5); // Random count between 0 and 4
-    data.push({ date: currentDate, count });
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
+// Helper function to generate heatmap data
+function generateHeatmapData(user: User) {
+  const data: dataObjectFull[] = [];
+  user.sports_activities.forEach((sa, x) => {
+    console.log(sa);
+    if (data.length === 0 && x === 0) {
+      const newObject = { date: sa.date, count: [sa] };
+      data.push(newObject);
+    }
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].date === sa.date) {
+        data[i].count.push(sa);
+        console.log(true);
+      } else {
+        const newObject = { date: sa.date, count: [sa] };
+        data.push(newObject);
+        console.log(false);
+      }
+    }
+    console.log("data", data);
+  });
+  //   const currentDate = new Date(startDate);
+  //   while (currentDate <= endDate) {
+  //     const count = isUserParticipantOrOrganizer(currentDate, user) ? 4 : 0;
+  //     data.push({ date: currentDate, count });
+  //     currentDate.setDate(currentDate.getDate() + 1);
+  //   }
   return data;
+}
+
+// Helper function to check if the user is a participant or organizer on a given date
+function isUserParticipantOrOrganizer(date: Date, user: User) {
+  return user.sports_activities.some((activity: Sports_activity) => {
+    const activityDate = new Date(activity.date);
+    return activityDate.toDateString() === date.toDateString();
+  });
 }
 
 export default CalendarHeatmapModal;

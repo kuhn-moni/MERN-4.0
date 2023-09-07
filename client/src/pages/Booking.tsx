@@ -111,7 +111,7 @@ const CreateActivityForm = () => {
           View Heatmap
         </button>
       </div>
-      {showModal && <CalendarHeatmapModal onClose={() => setShowModal(false)} />}
+      {showModal && user && <CalendarHeatmapModal user={user} onClose={() => setShowModal(false)} />}
 
       <label>
         Participants:

@@ -16,7 +16,10 @@ const middleTest = (req, res, next) => {
 
 const findAllUsers = async (request, response) => {
   try {
-    const users = await UserModel.find().populate("sports_activities");
+    const users = await UserModel.find().populate({
+      path: "sports_activities",
+      // populate: { path: "participants" },
+    });
     if (users) {
       const forFront = [];
       users.forEach((user) => {
@@ -37,6 +40,7 @@ const findAllUsers = async (request, response) => {
       response.status(404).json({ error: "No users found" });
     }
   } catch (e) {
+    console.log(e);
     response.status(500).json({ error: "Something went wrong..." });
   }
 };
@@ -148,7 +152,7 @@ const updatePassword = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const existingUser = await UserModel.findOne({ email });
+    const existingUser = await UserModel.findOne({ email }).populate("sports_activities");
     if (!existingUser) {
       return res.status(404).json({ error: "No user with that email." });
     }
@@ -180,6 +184,7 @@ const login = async (req, res) => {
 
 const getMe = async (req, res) => {
   // res.status(200).json(req.user) // full user, including private data
+  await req.user.populate("sports_activities");
   const forFront = {
     email: req.user.email,
     username: req.user.username,

@@ -46,6 +46,7 @@ function UserCard({ user }: Props) {
             <p>Upocoming activities</p>
             <ul>
               {user.sports_activities.map((p) => {
+                console.log(p);
                 return (
                   <div key={p._id}>
                     <li>
@@ -54,10 +55,7 @@ function UserCard({ user }: Props) {
                   </div>
                 );
               })}
-              <span>
-                {" "}
-                {participant && participant.username} - {participant && participant.email}
-              </span>
+              <span> {/* {participant && participant.username} - {participant && participant.email} */}</span>
             </ul>
           </>
         )}

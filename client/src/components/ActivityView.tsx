@@ -1,4 +1,4 @@
-import { Sports_activity, User } from "../@types";
+import { Sports_activity } from "../@types";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
@@ -6,11 +6,16 @@ interface ActivityViewProps {
   activityProps: Sports_activity;
 }
 
-const ActivityView = ({ activityProps }: ActivityViewProps) => {
+const ActivityView: React.FC<ActivityViewProps> = ({ activityProps }) => {
   const { organiser, participants, activity, duration, date } = activityProps;
   const { user } = useContext(AuthContext);
 
-  const isCreatedByCurrentUser = user && organiser._id === user._id;
+  const isCreatedByCurrentUser = organiser._id === user?._id;
+  const isParticipant = participants.some((participant) => participant.email === user?.email);
+
+  if (!isCreatedByCurrentUser && !isParticipant) {
+    return null; // Skip rendering if the activity is not relevant to the active user
+  }
 
   return (
     <div className={`d-flex flex-row flex-wrap justify-content-between mb-3 ${isCreatedByCurrentUser ? "green-tick" : ""}`}>
@@ -24,7 +29,7 @@ const ActivityView = ({ activityProps }: ActivityViewProps) => {
           border: "solid 2px",
           width: "15rem",
           flex: "0 0 33%",
-          backgroundColor: participants.some((participant: User) => participant.email === user?.email) ? "teal" : "",
+          backgroundColor: isParticipant ? "teal" : "",
         }}
       >
         <p>Activity</p>
@@ -32,8 +37,8 @@ const ActivityView = ({ activityProps }: ActivityViewProps) => {
         <>
           <p>Participants:</p>
           <ul>
-            {participants.map((participant: User, idx: number) => (
-              <li key={idx}>{(participant as User).username}</li>
+            {participants.map((participant, idx: number) => (
+              <li key={idx}>{participant.email}</li>
             ))}
           </ul>
         </>
